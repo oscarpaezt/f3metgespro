@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caja de Herramientas · Gestión de Proyectos</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:   #1E2761;
+    --blue:   #185FA5;
+    --ice:    #CADCFC;
+    --white:  #ffffff;
+    --off:    #F4F6FB;
+    --text:   #1A1A2E;
+    --muted:  #5A6A8A;
+    --border: #E2E8F0;
+
+    --inicio: #185FA5; --inicio-bg: #E6F1FB;
+    --planif: #3B6D11; --planif-bg: #EAF3DE;
+    --ejec:   #854F0B; --ejec-bg:   #FAEEDA;
+    --ctrl:   #993C1D; --ctrl-bg:   #FAECE7;
+    --cierre: #534AB7; --cierre-bg: #EEEDFE;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--off);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── HERO ─────────────────────────────────────── */
+  .hero {
+    background: var(--navy);
+    padding: 5rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -120px; right: -120px;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: rgba(202,220,252,0.06);
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; right: 60px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: rgba(24,95,165,0.25);
+  }
+
+  .hero-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-eyebrow {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--ice);
+    text-transform: uppercase;
+    opacity: 0.7;
+    margin-bottom: 1rem;
+  }
+
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    font-weight: 400;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 1.25rem;
+  }
+
+  .hero h1 em {
+    color: var(--ice);
+    font-style: italic;
+  }
+
+  .hero-sub {
+    font-size: 1rem;
+    color: var(--ice);
+    opacity: 0.75;
+    max-width: 520px;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .hero-divider {
+    width: 60px;
+    height: 3px;
+    background: var(--ice);
+    opacity: 0.4;
+    margin: 2rem 0 1.5rem;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 2.5rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-stat {
+    text-align: left;
+  }
+
+  .hero-stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .hero-stat-label {
+    font-size: 11px;
+    color: var(--ice);
+    opacity: 0.6;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  /* ── MAIN CONTENT ─────────────────────────────── */
+  .main {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+  }
+
+  /* ── FILTERS ──────────────────────────────────── */
+  .filter-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+  }
+
+  .filter-label {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12.5px;
+    font-weight: 400;
+    padding: 6px 18px;
+    border-radius: 24px;
+    border: 1.5px solid var(--border);
+    background: var(--white);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.18s ease;
+    letter-spacing: 0.3px;
+  }
+
+  .filter-btn:hover {
+    border-color: var(--blue);
+    color: var(--blue);
+  }
+
+  .filter-btn.active {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: var(--white);
+  }
+
+  .filter-btn[data-group="inicio"].active  { background: var(--inicio); border-color: var(--inicio); }
+  .filter-btn[data-group="planif"].active  { background: var(--planif); border-color: var(--planif); }
+  .filter-btn[data-group="ejec"].active    { background: var(--ejec);   border-color: var(--ejec);   }
+  .filter-btn[data-group="ctrl"].active    { background: var(--ctrl);   border-color: var(--ctrl);   }
+  .filter-btn[data-group="cierre"].active  { background: var(--cierre); border-color: var(--cierre); }
+
+  /* ── GRID ─────────────────────────────────────── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+  }
+
+  /* ── CARD ─────────────────────────────────────── */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.2rem 1.25rem 1rem;
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.4s ease both;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(30,39,97,0.1);
+    border-color: rgba(24,95,165,0.25);
+  }
+
+  .card.selected {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(24,95,165,0.12), 0 12px 32px rgba(30,39,97,0.1);
+  }
+
+  .card.hidden {
+    display: none;
+  }
+
+  .card-top-bar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    border-radius: 14px 14px 0 0;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    margin-top: 6px;
+  }
+
+  .card-num {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .card-icon {
+    font-size: 22px;
+    line-height: 1;
+  }
+
+  .card-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.35;
+    margin-bottom: 10px;
+  }
+
+  .card-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── DETAIL PANEL ─────────────────────────────── */
+  .detail-wrap {
+    display: none;
+    margin-top: 20px;
+    animation: fadeUp 0.3s ease both;
+  }
+
+  .detail-wrap.visible {
+    display: block;
+  }
+
+  .detail {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .detail-stripe {
+    height: 6px;
+  }
+
+  .detail-close {
+    position: absolute;
+    top: 18px; right: 20px;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--off);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: var(--muted);
+    transition: background 0.15s, color 0.15s;
+    line-height: 1;
+  }
+
+  .detail-close:hover {
+    background: var(--border);
+    color: var(--text);
+  }
+
+  .detail-header {
+    padding: 2rem 2.5rem 1.5rem;
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .detail-icon-wrap {
+    width: 64px; height: 64px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    flex-shrink: 0;
+  }
+
+  .detail-title-block h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.75rem;
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+
+  .detail-title-block p {
+    font-size: 13px;
+    color: var(--muted);
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  .detail-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid var(--border);
+  }
+
+  @media (max-width: 600px) {
+    .detail-body { grid-template-columns: 1fr; }
+  }
+
+  .detail-cell {
+    padding: 1.5rem 2rem;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .detail-cell:nth-child(even) { border-right: none; }
+  .detail-cell:nth-last-child(-n+2) { border-bottom: none; }
+
+  .detail-cell-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .detail-cell-text {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text);
+    font-weight: 300;
+  }
+
+  .areas-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .area-pill {
+    font-size: 11.5px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: var(--off);
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .detail-footer {
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--off);
+  }
+
+  .detail-footer-icon {
+    font-size: 26px;
+    flex-shrink: 0;
+  }
+
+  .detail-footer-text {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.6;
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  .detail-footer-label {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+    margin-bottom: 4px;
+    font-style: normal;
+  }
+
+  /* ── LEGEND ───────────────────────────────────── */
+  .legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 1.8rem;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── FOOTER ───────────────────────────────────── */
+  .footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--muted);
+    font-size: 12px;
+    border-top: 1px solid var(--border);
+    background: var(--white);
+  }
+
+  /* ── ANIMATIONS ───────────────────────────────── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card:nth-child(1)  { animation-delay: 0.03s; }
+  .card:nth-child(2)  { animation-delay: 0.06s; }
+  .card:nth-child(3)  { animation-delay: 0.09s; }
+  .card:nth-child(4)  { animation-delay: 0.12s; }
+  .card:nth-child(5)  { animation-delay: 0.15s; }
+  .card:nth-child(6)  { animation-delay: 0.18s; }
+  .card:nth-child(7)  { animation-delay: 0.21s; }
+  .card:nth-child(8)  { animation-delay: 0.24s; }
+  .card:nth-child(9)  { animation-delay: 0.27s; }
+  .card:nth-child(10) { animation-delay: 0.30s; }
+  .card:nth-child(11) { animation-delay: 0.33s; }
+  .card:nth-child(12) { animation-delay: 0.36s; }
+
+  /* ── RESPONSIVE ───────────────────────────────── */
+  @media (max-width: 640px) {
+    .hero { padding: 3rem 1.25rem 2.5rem; }
+    .detail-header { flex-direction: column; }
+    .detail-cell { padding: 1.25rem 1.5rem; }
+    .filter-section { gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-inner">
+    <p class="hero-eyebrow">Gestión y planeación de proyectos</p>
+    <h1>Caja de <em>Herramientas</em><br>Estratégicas</h1>
+    <div class="hero-divider"></div>
+    <p class="hero-sub">Conjunto de herramientas esenciales para planificar, ejecutar y controlar proyectos con eficacia, organizadas por grupo de procesos.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">12</div>
+        <div class="hero-stat-label">Herramientas</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">5</div>
+        <div class="hero-stat-label">Grupos de procesos</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">7</div>
+        <div class="hero-stat-label">Áreas de conocimiento</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- FILTERS -->
+  <div class="filter-section">
+    <span class="filter-label">Filtrar</span>
+    <div class="filters">
+      <button class="filter-btn active" data-group="all" onclick="filterCards(this,'all')">Todas</button>
+      <button class="filter-btn" data-group="inicio"  onclick="filterCards(this,'inicio')">Inicio</button>
+      <button class="filter-btn" data-group="planif"  onclick="filterCards(this,'planif')">Planificación</button>
+      <button class="filter-btn" data-group="ejec"    onclick="filterCards(this,'ejec')">Ejecución</button>
+      <button class="filter-btn" data-group="ctrl"    onclick="filterCards(this,'ctrl')">Control</button>
+      <button class="filter-btn" data-group="cierre"  onclick="filterCards(this,'cierre')">Cierre</button>
+    </div>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#185FA5"></div> Inicio</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#3B6D11"></div> Planificación</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#854F0B"></div> Ejecución</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#993C1D"></div> Control</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#534AB7"></div> Cierre</div>
+  </div>
+
+  <!-- GRID -->
+  <div class="grid" id="grid"></div>
+
+  <!-- DETAIL PANEL -->
+  <div class="detail-wrap" id="detailWrap">
+    <div class="detail" id="detail">
+      <div class="detail-stripe" id="dStripe"></div>
+      <button class="detail-close" onclick="closeDetail()" title="Cerrar">&#215;</button>
+
+      <div class="detail-header">
+        <div class="detail-icon-wrap" id="dIconWrap">
+          <span id="dIcon"></span>
+        </div>
+        <div class="detail-title-block">
+          <h2 id="dTitle"></h2>
+          <p id="dSubtitle"></p>
+        </div>
+      </div>
+
+      <div class="detail-body">
+        <div class="detail-cell">
+          <div class="detail-cell-label">¿En qué consiste?</div>
+          <div class="detail-cell-text" id="dDesc"></div>
+        </div>
+        <div class="detail-cell">
+          <div class="detail-cell-label">¿Para qué se utiliza?</div>
+          <div class="detail-cell-text" id="dUso"></div>
+        </div>
+        <div class="detail-cell">
+          <div class="detail-cell-label">Áreas de conocimiento</div>
+          <div class="areas-list" id="dAreas"></div>
+        </div>
+        <div class="detail-cell">
+          <div class="detail-cell-label">Grupo de procesos</div>
+          <span class="card-badge" id="dGrupo"></span>
+        </div>
+      </div>
+
+      <div class="detail-footer">
+        <div class="detail-footer-icon" id="dRelIcon"></div>
+        <div>
+          <div class="detail-footer-label">Analogía · Relación</div>
+          <div class="detail-footer-text" id="dRelacion"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  Caja de Herramientas · Gestión Estratégica de Proyectos &nbsp;·&nbsp; Haz clic en cualquier tarjeta para explorar la herramienta
+</footer>
+
+<script>
+const COLORS = {
+  inicio: { accent: '#185FA5', bg: '#E6F1FB', label: 'Inicio' },
+  planif: { accent: '#3B6D11', bg: '#EAF3DE', label: 'Planificación' },
+  ejec:   { accent: '#854F0B', bg: '#FAEEDA', label: 'Ejecución' },
+  ctrl:   { accent: '#993C1D', bg: '#FAECE7', label: 'Control' },
+  cierre: { accent: '#534AB7', bg: '#EEEDFE', label: 'Cierre' },
+};
+
+const tools = [
+  { id:'01', icon:'🧭', title:'Análisis de Viabilidad', subtitle:'Planeación estratégica', grupo:'inicio',
+    desc:'Herramienta para identificar, gestionar y priorizar proyectos en una organización, evaluando su factibilidad técnica, económica y operativa antes de iniciarlos.',
+    uso:'Permite al sponsor definir claramente las expectativas del proyecto en cuanto a tiempos, costos y alcance, determinando si el proyecto es viable antes de comprometer recursos.',
+    areas:['Tiempos','Costos','Alcance','Calidad','Riesgos'],
+    relIcon:'🧭', relacion:'La Brújula: nos ubica hacia dónde ir y nos permite saber dónde estamos, orientando las decisiones estratégicas del proyecto.' },
+
+  { id:'02', icon:'🐟', title:'Diagramas Causa–Efecto', subtitle:'Análisis de problemas', grupo:'planif',
+    desc:'Diagrama de Ishikawa o espina de pescado que representa gráficamente las posibles causas de un problema o efecto específico dentro del proyecto.',
+    uso:'Identifica las causas raíz de problemas o deficiencias, facilitando la toma de decisiones correctivas antes de que se agraven.',
+    areas:['Calidad','Alcance','Riesgos'],
+    relIcon:'🐟', relacion:'La Espina de Pescado: su forma visual permite rastrear el origen de los problemas de forma estructurada y clara.' },
+
+  { id:'03', icon:'📅', title:'Diagramas GANTT, CPM y PERT', subtitle:'Programación del proyecto', grupo:'planif',
+    desc:'Herramientas de programación que representan visualmente las actividades del proyecto en el tiempo, identificando rutas críticas y estimaciones de duración.',
+    uso:'Planifican, secuencian y controlan actividades, identificando la ruta crítica y los tiempos de holgura para optimizar el cronograma.',
+    areas:['Tiempos','Costos','Alcance'],
+    relIcon:'🗓️', relacion:'El Calendario: organiza y distribuye el tiempo de cada actividad para garantizar el cumplimiento de los plazos del proyecto.' },
+
+  { id:'04', icon:'⚠️', title:'Análisis de Riesgos', subtitle:'Gestión de incertidumbre', grupo:'planif',
+    desc:'Proceso sistemático para identificar, evaluar y priorizar los riesgos que pueden afectar el proyecto, estableciendo estrategias de respuesta preventivas o correctivas.',
+    uso:'Permite anticipar amenazas y oportunidades del proyecto, reduciendo la probabilidad de impactos negativos en tiempo, costo y alcance.',
+    areas:['Riesgos','Costos','Tiempos','Calidad'],
+    relIcon:'🛡️', relacion:'El Escudo: protege al proyecto de amenazas identificadas, preparándolo para enfrentar la incertidumbre del entorno.' },
+
+  { id:'05', icon:'👥', title:'Análisis de Stakeholders', subtitle:'Gestión de interesados', grupo:'inicio',
+    desc:'Identificación y análisis de todas las personas, grupos u organizaciones que tienen interés o influencia en el proyecto, evaluando su nivel de poder e impacto.',
+    uso:'Desarrolla estrategias de gestión y comunicación para mantener a los interesados comprometidos y alineados con los objetivos del proyecto.',
+    areas:['Comunicaciones','Alcance','Riesgos'],
+    relIcon:'🕸️', relacion:'La Red: conecta a todos los actores del proyecto, mostrando sus relaciones, influencias y dependencias mutuas.' },
+
+  { id:'06', icon:'🗂️', title:'Estructura Desglosada del Trabajo (EDT)', subtitle:'Descomposición del alcance', grupo:'planif',
+    desc:'Descomposición jerárquica del trabajo del proyecto en componentes manejables, organizados en niveles desde los entregables principales hasta las actividades específicas.',
+    uso:'Facilita la planificación detallada al dividir el proyecto en partes más pequeñas, asignando responsabilidades y estimando costos y tiempos.',
+    areas:['Alcance','Tiempos','Costos'],
+    relIcon:'🌳', relacion:'El Árbol: ramifica el trabajo desde el tronco principal hacia ramas y hojas, representando cada nivel de descomposición del proyecto.' },
+
+  { id:'07', icon:'📖', title:'Evaluación de Lecciones Aprendidas', subtitle:'Mejora continua', grupo:'cierre',
+    desc:'Proceso de documentar y analizar las experiencias positivas y negativas del proyecto para mejorar la gestión de proyectos futuros en la organización.',
+    uso:'Genera conocimiento institucional al registrar lo que funcionó y lo que falló, evitando repetir errores y replicando buenas prácticas en proyectos futuros.',
+    areas:['Calidad','Riesgos','Comunicaciones'],
+    relIcon:'📚', relacion:'La Biblioteca: acumula el conocimiento generado en cada proyecto, convirtiéndose en un repositorio de experiencias organizacionales.' },
+
+  { id:'08', icon:'🎯', title:'Gestión de Roles y Responsabilidades', subtitle:'Organización del equipo', grupo:'planif',
+    desc:'Definición y asignación clara de los roles del equipo del proyecto mediante la Matriz RACI, especificando quién es Responsable, Aprobador, Consultado e Informado.',
+    uso:'Garantiza que cada miembro del equipo conozca sus funciones y límites de autoridad, evitando duplicidades y vacíos en la ejecución del proyecto.',
+    areas:['Recursos Humanos','Comunicaciones','Alcance'],
+    relIcon:'🎭', relacion:'La Obra de Teatro: cada actor conoce su papel, sus parlamentos y los momentos de intervención para que el proyecto funcione como una producción coordinada.' },
+
+  { id:'09', icon:'📊', title:'Control, Seguimiento y Monitoreo', subtitle:'Supervisión del avance', grupo:'ctrl',
+    desc:'Actividades periódicas para medir el desempeño del proyecto frente a la línea base, identificando variaciones y aplicando acciones correctivas oportunas.',
+    uso:'Mantiene el proyecto dentro de los parámetros de tiempo, costo y calidad establecidos, permitiendo tomar decisiones informadas ante desviaciones.',
+    areas:['Tiempos','Costos','Calidad','Alcance'],
+    relIcon:'🌡️', relacion:'El Termómetro: mide la temperatura del proyecto en tiempo real, alertando cuando algo se desvía del rango saludable esperado.' },
+
+  { id:'10', icon:'📢', title:'Plan de Comunicaciones e Informes', subtitle:'Gestión de la información', grupo:'planif',
+    desc:'Documento que define qué información se comunica, a quién, con qué frecuencia y a través de qué canales, garantizando un flujo efectivo de información en el proyecto.',
+    uso:'Asegura que los interesados reciban información oportuna y relevante, reduciendo malentendidos y manteniendo la transparencia en el desarrollo del proyecto.',
+    areas:['Comunicaciones','Alcance','Calidad'],
+    relIcon:'📡', relacion:'La Radio: transmite los mensajes correctos a las audiencias correctas, en el momento oportuno y en la frecuencia adecuada.' },
+
+  { id:'11', icon:'🏁', title:'Plan de Hitos', subtitle:'Puntos de control clave', grupo:'planif',
+    desc:'Identificación y programación de los eventos o entregables más significativos del proyecto, que representan puntos de referencia clave para medir el avance.',
+    uso:'Permite al equipo y los interesados visualizar el progreso del proyecto en momentos clave, facilitando la toma de decisiones y el control del avance.',
+    areas:['Tiempos','Alcance','Comunicaciones'],
+    relIcon:'🚩', relacion:'Las Banderas de Ruta: señalan los puntos clave del camino, indicando que se ha avanzado correctamente hacia la meta del proyecto.' },
+
+  { id:'12', icon:'🔄', title:'Optimización del Calendario', subtitle:'Programación, ajustes y optimización', grupo:'ejec',
+    desc:'Proceso continuo de revisión y ajuste del cronograma del proyecto para adaptarlo a las condiciones reales, aplicando técnicas como compresión, paralelismo y nivelación de recursos.',
+    uso:'Garantiza que el proyecto se mantenga dentro de los plazos establecidos, optimizando el uso de recursos y reduciendo tiempos muertos o cuellos de botella.',
+    areas:['Tiempos','Recursos','Costos'],
+    relIcon:'⚙️', relacion:'Los Engranajes: ajustan y sincronizan las piezas del proyecto para que todo funcione de manera fluida, eficiente y coordinada.' },
+];
+
+let selectedId = null;
+let activeFilter = 'all';
+
+// Build grid
+function buildGrid() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  tools.forEach(t => {
+    const c = COLORS[t.grupo];
+    const card = document.createElement('div');
+    card.className = 'card' + (t.id === selectedId ? ' selected' : '') + (activeFilter !== 'all' && t.grupo !== activeFilter ? ' hidden' : '');
+    card.dataset.grupo = t.grupo;
+    card.dataset.id = t.id;
+    card.innerHTML = `
+      <div class="card-top-bar" style="background:${c.accent}"></div>
+      <div class="card-header">
+        <span class="card-num">${t.id}</span>
+        <span class="card-icon">${t.icon}</span>
+      </div>
+      <div class="card-title">${t.title}</div>
+      <span class="card-badge" style="background:${c.bg};color:${c.accent}">${c.label}</span>
+    `;
+    card.addEventListener('click', () => openDetail(t.id));
+    grid.appendChild(card);
+  });
+}
+
+function openDetail(id) {
+  const t = tools.find(x => x.id === id);
+  selectedId = id;
+  const c = COLORS[t.grupo];
+
+  document.getElementById('dStripe').style.background = c.accent;
+  document.getElementById('dIcon').textContent = t.icon;
+  document.getElementById('dIconWrap').style.background = c.bg;
+  document.getElementById('dTitle').textContent = t.title;
+  document.getElementById('dSubtitle').textContent = t.subtitle;
+  document.getElementById('dDesc').textContent = t.desc;
+  document.getElementById('dUso').textContent = t.uso;
+  document.getElementById('dRelIcon').textContent = t.relIcon;
+  document.getElementById('dRelacion').textContent = t.relacion;
+
+  const grupoEl = document.getElementById('dGrupo');
+  grupoEl.textContent = c.label;
+  grupoEl.style.cssText = `background:${c.bg};color:${c.accent};font-size:12px;padding:5px 14px;border-radius:20px;font-weight:500`;
+
+  const areasEl = document.getElementById('dAreas');
+  areasEl.innerHTML = t.areas.map(a => `<span class="area-pill">${a}</span>`).join('');
+
+  const wrap = document.getElementById('detailWrap');
+  wrap.classList.add('visible');
+  buildGrid();
+  setTimeout(() => wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 60);
+}
+
+function closeDetail() {
+  selectedId = null;
+  document.getElementById('detailWrap').classList.remove('visible');
+  buildGrid();
+}
+
+function filterCards(btn, group) {
+  activeFilter = group;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (selectedId) {
+    const t = tools.find(x => x.id === selectedId);
+    if (group !== 'all' && t.grupo !== group) closeDetail();
+    else buildGrid();
+  } else {
+    buildGrid();
+  }
+}
+
+buildGrid();
+</script>
+</body>
+</html>
