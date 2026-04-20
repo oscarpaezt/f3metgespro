@@ -133,6 +133,76 @@
     margin-top: 2px;
   }
 
+  /* ── HERO COMPACT (on filter or card select) ──── */
+  .hero {
+    transition: padding 0.4s ease;
+  }
+
+  .hero.compact {
+    padding: 1.1rem 2rem;
+  }
+
+  .hero.compact .hero-eyebrow {
+    display: none;
+  }
+
+
+  .hero.compact h1 .hero-title-full { display: none; }
+  .hero.compact h1 .hero-title-compact { display: inline; }
+  .hero.compact h1 {
+    font-size: 1rem;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ice);
+    opacity: 0.8;
+    margin-bottom: 0;
+  }
+
+  .hero.compact h1 em {
+    font-style: normal;
+    color: var(--ice);
+  }
+
+  .hero.compact .hero-sub,
+  .hero.compact .hero-divider,
+  .hero.compact .hero-stats {
+    display: none;
+  }
+
+  /* ── GRID COMPACT (on card select) ───────────── */
+  .grid.compact {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 8px;
+  }
+
+  .grid.compact .card {
+    padding: 0.75rem 0.9rem 0.7rem;
+  }
+
+  .grid.compact .card-title {
+    font-size: 11.5px;
+    margin-bottom: 8px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .grid.compact .card-icon {
+    font-size: 16px;
+  }
+
+  .grid.compact .card-num {
+    font-size: 9px;
+  }
+
+  .grid.compact .card-badge {
+    font-size: 9px;
+    padding: 2px 8px;
+  }
+
   /* ── MAIN CONTENT ─────────────────────────────── */
   .main {
     max-width: 1080px;
@@ -492,6 +562,9 @@
     .detail-cell { padding: 1.25rem 1.5rem; }
     .filter-section { gap: 8px; }
   }
+  #dDesc {
+    white-space: pre-line;
+	}
 </style>
 </head>
 <body>
@@ -500,7 +573,7 @@
 <header class="hero">
   <div class="hero-inner">
     <p class="hero-eyebrow">Gestión y planeación de proyectos</p>
-    <h1>Caja de <em>Herramientas</em><br>Estratégicas</h1>
+    <h1><span class="hero-title-full">Caja de <em>Herramientas</em><br>Estratégicas</span><span class="hero-title-compact" style="display:none">Gestión y Planeación de Proyectos</span></h1>
     <div class="hero-divider"></div>
     <p class="hero-sub">Conjunto de herramientas esenciales para planificar, ejecutar y controlar proyectos con eficacia, organizadas por grupo de procesos.</p>
     <div class="hero-stats">
@@ -610,8 +683,8 @@ const COLORS = {
 
 const tools = [
   { id:'01', icon:'🧭', title:'Análisis de Viabilidad', subtitle:'Planeación estratégica', grupo:'inicio',
-    desc:'Herramienta para identificar, gestionar y priorizar proyectos en una organización, evaluando su factibilidad técnica, económica y operativa antes de iniciarlos.',
-    uso:'Permite al sponsor definir claramente las expectativas del proyecto en cuanto a tiempos, costos y alcance, determinando si el proyecto es viable antes de comprometer recursos.',
+    desc:'El análisis de viabilidad es el paso donde las decisiones tienen un fundamento sólido, es precisamente la viabilidad la que permite darle una dirección lógica al proyecto. Este análisis comprende una serie de verificaciones que permiten establecer unos criterios, entre los más fundamentales tenemos, el aspecto económico y financiero, el aspecto técnico, el aspecto legal, y el aspecto operativo entre otros que según la finalidad del proyecto se deben tener en cuenta.\n Cada uno de estos aspectos son análisis que se pueden hacer por separado y que permiten que las decisiones se basen en información más precisa. Podemos separar estos aspectos en los siguiente:\n Viabilidad Técnica: Donde se examinan los recursos técnicos del proyecto o el producto. Análisis indicados, que brindan información sobre el grado de experiencia necesaria y los recursos técnicos para cumplir con los requisitos del proyecto.\n Viabilidad económica o financiera: En este aspecto se verifican aspectos como los recursos en cuanto a equipos, hardware y software, también se tienen en cuenta el equipo humano y especializado con el que se cuenta. En el caso de actores públicos o privados debe considerarse la magnitud de los fondos requeridos por el Proyecto en relación con las magnitudes habitualmente gestionadas por los entes respectivos. \n Viabilidad jurídica: Se debe asegurar el cumplimiento de todos los requisitos legales. Lo que incluye investigar si se aplica la normativa en materia legal tanto en las actividades para llevarlo a cabo como en los resultados del proyecto. Entre las que se deben tener en cuenta protección de datos, normativas laborales, licencias, permisos, derechos de autor y regulaciones sectoriales entre otros. \n Viabilidad organizacional/Institucional (Operativa): se refiere a la adecuación de un proyecto a la planificación de la capacidad, los recursos, las metas estratégicas y los objetivos empresariales. Esto incluye la estructura para soportar los procesos necesarios y el personal capacitado o se plantea la capacitación del personal. \n Viabilidad Temporal: Es necesario calcular el tiempo que llevará la ejecución del proyecto y estimar los plazos para su desarrollo.\n Viabilidad organizacional/Institucional (Operativa): se refiere a la adecuación de un proyecto a la planificación de la capacidad, los recursos, las metas estratégicas y los objetivos empresariales. Esto incluye la estructura para soportar los procesos necesarios y el personal capacitado o se plantea la capacitación del personal. \n Viabilidad Temporal: Es necesario calcular el tiempo que llevará la ejecución del proyecto y estimar los plazos para su desarrollo.',
+    uso:'Permite definir claramente las expectativas del proyecto en cuanto a tiempos, costos y alcance, determinando si el proyecto es viable antes de comprometer recursos de esta manera podemos validar la probabilidad de éxito de un proyecto antes de ejecutarlo.',
     areas:['Tiempos','Costos','Alcance','Calidad','Riesgos'],
     relIcon:'🧭', relacion:'La Brújula: nos ubica hacia dónde ir y nos permite saber dónde estamos, orientando las decisiones estratégicas del proyecto.' },
 
@@ -733,6 +806,8 @@ function openDetail(id) {
 
   const wrap = document.getElementById('detailWrap');
   wrap.classList.add('visible');
+  document.querySelector('.hero').classList.add('compact');
+  document.getElementById('grid').classList.add('compact');
   buildGrid();
   setTimeout(() => wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 60);
 }
@@ -740,6 +815,10 @@ function openDetail(id) {
 function closeDetail() {
   selectedId = null;
   document.getElementById('detailWrap').classList.remove('visible');
+  document.getElementById('grid').classList.remove('compact');
+  if (activeFilter === 'all') {
+    document.querySelector('.hero').classList.remove('compact');
+  }
   buildGrid();
 }
 
@@ -747,6 +826,12 @@ function filterCards(btn, group) {
   activeFilter = group;
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+  const hero = document.querySelector('.hero');
+  if (group === 'all') {
+    hero.classList.remove('compact');
+  } else {
+    hero.classList.add('compact');
+  }
   if (selectedId) {
     const t = tools.find(x => x.id === selectedId);
     if (group !== 'all' && t.grupo !== group) closeDetail();
