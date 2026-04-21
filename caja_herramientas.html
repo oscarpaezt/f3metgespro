@@ -344,6 +344,66 @@
     letter-spacing: 0.5px;
   }
 
+
+  /* ── IMAGE PANEL inside uso cell ─────────────── */
+  .uso-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .uso-image-wrap {
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--off);
+    min-height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .uso-image-wrap img {
+    width: 100%;
+    height: 180px;
+    object-fit: fill;
+    display: block;
+    border-radius: 10px;
+  }
+
+  .uso-image-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 1.5rem;
+    color: var(--muted);
+    text-align: center;
+    width: 100%;
+  }
+
+  .uso-image-placeholder-icon {
+    font-size: 28px;
+    opacity: 0.35;
+  }
+
+  .uso-image-placeholder-text {
+    font-size: 11.5px;
+    opacity: 0.55;
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  .uso-image-caption {
+    font-size: 10.5px;
+    color: var(--muted);
+    font-style: italic;
+    text-align: center;
+    margin-top: -4px;
+    opacity: 0.7;
+  }
   /* ── DETAIL PANEL ─────────────────────────────── */
   .detail-wrap {
     display: none;
@@ -642,9 +702,17 @@
           <div class="detail-cell-label">¿En qué consiste?</div>
           <div class="detail-cell-text" id="dDesc"></div>
         </div>
-        <div class="detail-cell">
+        <div class="detail-cell uso-cell">
           <div class="detail-cell-label">¿Para qué se utiliza?</div>
           <div class="detail-cell-text" id="dUso"></div>
+          <div class="uso-image-wrap" id="dImgWrap">
+            <div class="uso-image-placeholder" id="dImgPlaceholder">
+              <div class="uso-image-placeholder-icon">🖼️</div>
+              <div class="uso-image-placeholder-text">Agrega una URL de imagen<br>en el campo <code>path</code> del JSON</div>
+            </div>
+            <img id="dImg" src="" alt="Imagen de la herramienta" style="display:none" onload="this.style.display='block';document.getElementById('dImgPlaceholder').style.display='none'" onerror="this.style.display='none';document.getElementById('dImgPlaceholder').style.display='flex'">
+          </div>
+          <div class="uso-image-caption" id="dImgCaption" style="display:none"></div>
         </div>
         <div class="detail-cell">
           <div class="detail-cell-label">Áreas de conocimiento</div>
@@ -686,73 +754,73 @@ const tools = [
     desc:'El análisis de viabilidad es el paso donde las decisiones tienen un fundamento sólido, es precisamente la viabilidad la que permite darle una dirección lógica al proyecto. Este análisis comprende una serie de verificaciones que permiten establecer unos criterios, entre los más fundamentales tenemos, el aspecto económico y financiero, el aspecto técnico, el aspecto legal, y el aspecto operativo entre otros que según la finalidad del proyecto se deben tener en cuenta.\n Cada uno de estos aspectos son análisis que se pueden hacer por separado y que permiten que las decisiones se basen en información más precisa. Podemos separar estos aspectos en los siguiente:\n Viabilidad Técnica: Donde se examinan los recursos técnicos del proyecto o el producto. Análisis indicados, que brindan información sobre el grado de experiencia necesaria y los recursos técnicos para cumplir con los requisitos del proyecto.\n Viabilidad económica o financiera: En este aspecto se verifican aspectos como los recursos en cuanto a equipos, hardware y software, también se tienen en cuenta el equipo humano y especializado con el que se cuenta. En el caso de actores públicos o privados debe considerarse la magnitud de los fondos requeridos por el Proyecto en relación con las magnitudes habitualmente gestionadas por los entes respectivos. \n Viabilidad jurídica: Se debe asegurar el cumplimiento de todos los requisitos legales. Lo que incluye investigar si se aplica la normativa en materia legal tanto en las actividades para llevarlo a cabo como en los resultados del proyecto. Entre las que se deben tener en cuenta protección de datos, normativas laborales, licencias, permisos, derechos de autor y regulaciones sectoriales entre otros. \n Viabilidad organizacional/Institucional (Operativa): se refiere a la adecuación de un proyecto a la planificación de la capacidad, los recursos, las metas estratégicas y los objetivos empresariales. Esto incluye la estructura para soportar los procesos necesarios y el personal capacitado o se plantea la capacitación del personal. \n Viabilidad Temporal: Es necesario calcular el tiempo que llevará la ejecución del proyecto y estimar los plazos para su desarrollo.\n Viabilidad organizacional/Institucional (Operativa): se refiere a la adecuación de un proyecto a la planificación de la capacidad, los recursos, las metas estratégicas y los objetivos empresariales. Esto incluye la estructura para soportar los procesos necesarios y el personal capacitado o se plantea la capacitación del personal. \n Viabilidad Temporal: Es necesario calcular el tiempo que llevará la ejecución del proyecto y estimar los plazos para su desarrollo.',
     uso:'Permite definir claramente las expectativas del proyecto en cuanto a tiempos, costos y alcance, determinando si el proyecto es viable antes de comprometer recursos de esta manera podemos validar la probabilidad de éxito de un proyecto antes de ejecutarlo.',
     areas:['Tiempos','Costos','Alcance','Calidad','Riesgos'],
-    relIcon:'🧭', relacion:'La Brújula: nos ubica hacia dónde ir y nos permite saber dónde estamos, orientando las decisiones estratégicas del proyecto.' },
+    relIcon:'🧭', relacion:'La Brújula: nos ubica hacia dónde ir y nos permite saber dónde estamos, orientando las decisiones estratégicas del proyecto.' , path:'./img/a_analivia.png' },
 
   { id:'02', icon:'🐟', title:'Diagramas Causa–Efecto', subtitle:'Análisis de problemas', grupo:'planif',
-    desc:'Diagrama de Ishikawa o espina de pescado que representa gráficamente las posibles causas de un problema o efecto específico dentro del proyecto.',
-    uso:'Identifica las causas raíz de problemas o deficiencias, facilitando la toma de decisiones correctivas antes de que se agraven.',
+    desc:'Llamado también espina de pescado o Ishikawa, es una de las herramientas que podemos utilizar para la representación de las causas, subcausas que potencialmente pueden explicar un problema, en este gráfico se representan las causas generalmente a la izquierda apuntando a la derecha donde se ubica el efecto(problema) todo ello simulando las espinas de pescado, puesto que las causas deben estar relacionadas entre sí.',
+    uso:'Identifica las causas raíz de problemas o deficiencias, facilitando la toma de decisiones correctivas antes de que se agraven. \n Actuando como un mapa visual que permite identificar y organizar las raíces de un evento específico.',
     areas:['Calidad','Alcance','Riesgos'],
-    relIcon:'🐟', relacion:'La Espina de Pescado: su forma visual permite rastrear el origen de los problemas de forma estructurada y clara.' },
+    relIcon:'🐟', relacion:'La Espina de Pescado: su forma visual permite rastrear el origen de los problemas de forma estructurada y clara.' , path:'./img/b_pescado.png' },
 
   { id:'03', icon:'📅', title:'Diagramas GANTT, CPM y PERT', subtitle:'Programación del proyecto', grupo:'planif',
-    desc:'Herramientas de programación que representan visualmente las actividades del proyecto en el tiempo, identificando rutas críticas y estimaciones de duración.',
+    desc:'	GANTT: Este diagrama en el cual se representa en barras,  las actividades planteadas a través del tiempo de duración especificando su inicio y su estimado final, de esta manera se puede estimar el inicio de otro proceso o solo el final de la actividad. Sirve como cronograma y es uno de los más comunes en utilizar.\n CPM: recibe el nombre de ruta crítica (Critical Path Method) está técnica en la cual se identifica la secuencia de actividades que determina el tiempo total que necesita cada una de las actividades, es crítica porque a raíz de un retraso puede afectar el cronograma del proyecto. \n Los pasos que pueden utilizarse para definirlos en la técnica son:\n 1.	Identificar todas las tareas necesarias para completar el proyecto. \n2.	Definir qué tareas dependen de otras para ser completadas y estimar la duración de cada una de ellas.\n 3.	Dibujar un diagrama de red con nodos conectados por flechas, que indiquen la secuencia de las actividades.\n 4.	Identificar el tiempo más temprano y más tardío posible para comenzar y finalizar cada tarea.\n5.	Calcular qué secuencia de tareas debe completarse a tiempo, para evitar retrasos en todo el proyecto. \nCada actividad se visualiza en un nodo (cuadro) que contiene información temporal específica:\n•	Actividad: El nombre o ID del trabajo a realizar.\n•	Duración: El tiempo estimado para completarla.\n•	ES (Earliest Start): Inicio más temprano.\n•	EF (Earliest Finish): Fin más temprano.\n•	LS (Latest Start): Inicio más tardío (sin retrasar el proyecto).\n•	LF (Latest Finish): Fin más tardío.\n•	Holgura (Float/Slack): El tiempo que una tarea se puede retrasar sin afectar la fecha final\nEl PERT se utiliza fundamentalmente para la gestión de la incertidumbre. A diferencia del CPM (que asume que sabes exactamente cuánto durará cada tarea), el PERT se usa en proyectos donde los tiempos son desconocidos o muy variables, como en investigación, desarrollo de software innovador o nuevos lanzamientos, utilizando tres escenarios:\n- Optimista: Todo sale perfecto.\n- Pesimista: Todo lo que puede fallar, falla.\n- Más probable: Lo que sucede normalmente.',
     uso:'Planifican, secuencian y controlan actividades, identificando la ruta crítica y los tiempos de holgura para optimizar el cronograma.',
     areas:['Tiempos','Costos','Alcance'],
-    relIcon:'🗓️', relacion:'El Calendario: organiza y distribuye el tiempo de cada actividad para garantizar el cumplimiento de los plazos del proyecto.' },
+    relIcon:'🗓️', relacion:'El Calendario: organiza y distribuye el tiempo de cada actividad para garantizar el cumplimiento de los plazos del proyecto.' , path:'./img/c_diaggantt_cpm_pert.png' },
 
   { id:'04', icon:'⚠️', title:'Análisis de Riesgos', subtitle:'Gestión de incertidumbre', grupo:'planif',
-    desc:'Proceso sistemático para identificar, evaluar y priorizar los riesgos que pueden afectar el proyecto, estableciendo estrategias de respuesta preventivas o correctivas.',
+    desc:'Es una herramienta visual y cualitativa que permite priorizar los riesgos de un proyecto. Dado que los recursos de gestión son limitados, esta matriz ayuda a decidir qué riesgos requieren un plan de respuesta inmediato y cuáles solo necesitan seguimiento o monitoreo.\nPara el desarrollo se debe tener en cuenta sus dos ejes, probabilidades y efecto o impacto que tiene sobre los objetivos del proyecto (alcance, tiempo, costo o calidad) es habitual utilizar colores para identificar el impacto de los riesgos \nRojo cuando son Altos, Amarilla si son moderados, Verde si son bajos.',
     uso:'Permite anticipar amenazas y oportunidades del proyecto, reduciendo la probabilidad de impactos negativos en tiempo, costo y alcance.',
     areas:['Riesgos','Costos','Tiempos','Calidad'],
-    relIcon:'🛡️', relacion:'El Escudo: protege al proyecto de amenazas identificadas, preparándolo para enfrentar la incertidumbre del entorno.' },
+    relIcon:'🛡️', relacion:'El Escudo: protege al proyecto de amenazas identificadas, preparándolo para enfrentar la incertidumbre del entorno.' , path:'./img/d_probimpac.png' },
 
   { id:'05', icon:'👥', title:'Análisis de Stakeholders', subtitle:'Gestión de interesados', grupo:'inicio',
-    desc:'Identificación y análisis de todas las personas, grupos u organizaciones que tienen interés o influencia en el proyecto, evaluando su nivel de poder e impacto.',
-    uso:'Desarrolla estrategias de gestión y comunicación para mantener a los interesados comprometidos y alineados con los objetivos del proyecto.',
+    desc:'El análisis de interesados te permite mapear y establecer el nivel adecuado de comunicación con tus interesados en relación con su influencia y su interés en tu proyecto.\nLa aceptación y la aprobación de los interesados tienen tanto que ver con la comunicación, la educación y la visibilidad como con la alineación estratégica. Los interesados deben estar en condiciones de comprender rápida y fácilmente en qué medida un proyecto o una inversión nuevos encajan dentro de la imagen general de la empresa.\nLa cuadrícula de intereses de poder de los interesados es la principal herramienta para evaluar gráficamente a los principales interesados.\n•	Personas de alto poder, alto interés: interactúa integralmente con estas personas, y pone todo tu empeño en satisfacerlos.\n•	Personas de alto poder, menos interesadas: mantén a estos interesados satisfechos, pero no tanto como para que se aburran con tu mensaje.\n•	Personas de bajo poder, sumamente interesadas: informa adecuadamente a estas personas y habla con ellos para asegurarte de que no surjan problemas importantes. Las personas de esta categoría pueden ayudarte mucho con los detalles de tu proyecto, en un papel de apoyo.\n•	Personas de bajo poder y menos interesadas: nuevamente, controla a estas personas, pero no las aburras con comunicaciones excesivas.\n\nLos datos a tener en cuenta como registro son:\n-	Información de contacto y rol.\n-	Requisitos principales y expectativas.\n-	Clasificación en la matriz.-	Estrategia de comunicación (frecuencia y canal).',
+    uso:'Se identifican o eligen los interesados y se desarrollan estrategias de gestión y comunicación para mantener a los interesados comprometidos y alineados con los objetivos del proyecto.',
     areas:['Comunicaciones','Alcance','Riesgos'],
-    relIcon:'🕸️', relacion:'La Red: conecta a todos los actores del proyecto, mostrando sus relaciones, influencias y dependencias mutuas.' },
+    relIcon:'🕸️', relacion:'La Red: conecta a todos los actores del proyecto, mostrando sus relaciones, influencias y dependencias mutuas.' , path:'./img/e_takeholders.png' },
 
   { id:'06', icon:'🗂️', title:'Estructura Desglosada del Trabajo (EDT)', subtitle:'Descomposición del alcance', grupo:'planif',
-    desc:'Descomposición jerárquica del trabajo del proyecto en componentes manejables, organizados en niveles desde los entregables principales hasta las actividades específicas.',
+    desc:'(WBS, por sus siglas en inglés, work breakdown structure), Se utiliza para definir y gestionar los entregables de un proyecto. La EDT es una estructura jerárquica que desglosa actividades complejas en partes más manejables y permite que los usuarios puedan ver cada entregable que debe completarse para alcanzar el objetivo general de un proyecto. \nUna EDT debe tener los siguientes atributos para maximizar su eficacia:\n•	Definida: EDT debe comprenderse con facilidad por parte de los participantes y los grupos interesados en el proyecto.\n•	Fácilmente calculada: Pueden incluirse las duraciones de las tareas, el costo y los recursos necesarios para calcular el costo y el tiempo necesarios para completar el proyecto.\n•	Manejable: Se asignan las responsabilidades específicas claramente a cada persona, por lo que es más fácil manejarlas.\n•	Mensurable: La WBS debe incluir las fechas de inicio y de finalización e hitos evaluables para que se pueda medir el avance con precisión.\n•	Flexible: La estructura debe poder adaptarse a cambios menores, por ejemplo, cambios en la fecha de entrega o adición de tareas. No obstante, ten presente que uno de los objetivos de la estructura desagregada de trabajo es brindar una imagen completa de los entregables previstos para evitar el síndrome del lavadero y los retrabajos.',
     uso:'Facilita la planificación detallada al dividir el proyecto en partes más pequeñas, asignando responsabilidades y estimando costos y tiempos.',
     areas:['Alcance','Tiempos','Costos'],
-    relIcon:'🌳', relacion:'El Árbol: ramifica el trabajo desde el tronco principal hacia ramas y hojas, representando cada nivel de descomposición del proyecto.' },
+    relIcon:'🌳', relacion:'El Árbol: ramifica el trabajo desde el tronco principal hacia ramas y hojas, representando cada nivel de descomposición del proyecto.' , path:'./img/f_edt.png' },
 
   { id:'07', icon:'📖', title:'Evaluación de Lecciones Aprendidas', subtitle:'Mejora continua', grupo:'cierre',
-    desc:'Proceso de documentar y analizar las experiencias positivas y negativas del proyecto para mejorar la gestión de proyectos futuros en la organización.',
+    desc:'La evaluación de lecciones aprendidas es una herramienta fundamental que permite registrar experiencias obtenidas durante el desarrollo del proyecto, identificando aciertos, errores, riesgos materializados y oportunidades de mejora.\nSu propósito principal es:\n•	Evitar repetir errores en futuros proyectos \n•	Fortalecer buenas prácticas \n•	Generar conocimiento organizacional \n•	Mejorar procesos internos \nEn metodologías tradicionales esta evaluación suele realizarse al cierre del proyecto, mientras que en metodologías ágiles se ejecuta al finalizar cada iteración mediante retrospectivas. \nEjemplo: \nAl finalizar un proyecto de desarrollo de software se documenta que hubo retrasos por falta de definición de requerimientos; esta información se usa para mejorar futuros procesos de planeación.',
     uso:'Genera conocimiento institucional al registrar lo que funcionó y lo que falló, evitando repetir errores y replicando buenas prácticas en proyectos futuros.',
     areas:['Calidad','Riesgos','Comunicaciones'],
-    relIcon:'📚', relacion:'La Biblioteca: acumula el conocimiento generado en cada proyecto, convirtiéndose en un repositorio de experiencias organizacionales.' },
+    relIcon:'📚', relacion:'La Biblioteca: acumula el conocimiento generado en cada proyecto, convirtiéndose en un repositorio de experiencias organizacionales.' , path:'./img/g_leccapren.png' },
 
   { id:'08', icon:'🎯', title:'Gestión de Roles y Responsabilidades', subtitle:'Organización del equipo', grupo:'planif',
-    desc:'Definición y asignación clara de los roles del equipo del proyecto mediante la Matriz RACI, especificando quién es Responsable, Aprobador, Consultado e Informado.',
+    desc:'La gestión de roles define claramente quién ejecuta cada actividad dentro del proyecto, evitando duplicidad de funciones y mejorando la coordinación. \nHerramientas utilizadas: \n•	Matriz RACI (Responsable, Aprobador, Consultado, Informado) \n•	Organigrama del proyecto \n•	Descripción de funciones \nSegún Proceso de formulación y gestión de proyectos de investigación, desarrollo e innovación (i+d+i), una adecuada distribución de responsabilidades mejora el desempeño del equipo y facilita el control de resultados.',
     uso:'Garantiza que cada miembro del equipo conozca sus funciones y límites de autoridad, evitando duplicidades y vacíos en la ejecución del proyecto.',
     areas:['Recursos Humanos','Comunicaciones','Alcance'],
-    relIcon:'🎭', relacion:'La Obra de Teatro: cada actor conoce su papel, sus parlamentos y los momentos de intervención para que el proyecto funcione como una producción coordinada.' },
+    relIcon:'🎭', relacion:'La Obra de Teatro: cada actor conoce su papel, sus parlamentos y los momentos de intervención para que el proyecto funcione como una producción coordinada.' , path:'./img/h_gesrol.png' },
 
   { id:'09', icon:'📊', title:'Control, Seguimiento y Monitoreo', subtitle:'Supervisión del avance', grupo:'ctrl',
-    desc:'Actividades periódicas para medir el desempeño del proyecto frente a la línea base, identificando variaciones y aplicando acciones correctivas oportunas.',
+    desc:'Es el proceso mediante el cual se compara el avance real del proyecto con lo planeado. \nPermite: \nDetectar desviaciones \n•	Tomar acciones correctivas \n•	Controlar costos \n•	Revisar cumplimiento de tiempos \nHerramientas más utilizadas: \n•	Indicadores KPI \n•	Diagramas de avance \n•	Informes de estado \n•	Valor ganado',
     uso:'Mantiene el proyecto dentro de los parámetros de tiempo, costo y calidad establecidos, permitiendo tomar decisiones informadas ante desviaciones.',
     areas:['Tiempos','Costos','Calidad','Alcance'],
-    relIcon:'🌡️', relacion:'El Termómetro: mide la temperatura del proyecto en tiempo real, alertando cuando algo se desvía del rango saludable esperado.' },
+    relIcon:'🌡️', relacion:'El Termómetro: mide la temperatura del proyecto en tiempo real, alertando cuando algo se desvía del rango saludable esperado.' , path:'./img/i_controlseg.png' },
 
   { id:'10', icon:'📢', title:'Plan de Comunicaciones e Informes', subtitle:'Gestión de la información', grupo:'planif',
-    desc:'Documento que define qué información se comunica, a quién, con qué frecuencia y a través de qué canales, garantizando un flujo efectivo de información en el proyecto.',
+    desc:'Documento que define qué información se comunica, a quién, con qué frecuencia y a través de qué canales, garantizando un flujo efectivo de información en el proyecto. \nOrganiza cómo circula la información entre todos los interesados del proyecto. \nDefine: \n•	Qué información se comunica \n•	A quién se comunica \n•	Frecuencia \n•	Medio utilizado \nHerramientas: \n•	Informes periódicos \n•	Correos formales \n•	Reuniones de seguimiento \n•	Tableros colaborativos',
     uso:'Asegura que los interesados reciban información oportuna y relevante, reduciendo malentendidos y manteniendo la transparencia en el desarrollo del proyecto.',
     areas:['Comunicaciones','Alcance','Calidad'],
-    relIcon:'📡', relacion:'La Radio: transmite los mensajes correctos a las audiencias correctas, en el momento oportuno y en la frecuencia adecuada.' },
+    relIcon:'📡', relacion:'La Radio: transmite los mensajes correctos a las audiencias correctas, en el momento oportuno y en la frecuencia adecuada.' , path:'./img/j_plancom.png' },
 
   { id:'11', icon:'🏁', title:'Plan de Hitos', subtitle:'Puntos de control clave', grupo:'planif',
-    desc:'Identificación y programación de los eventos o entregables más significativos del proyecto, que representan puntos de referencia clave para medir el avance.',
+    desc:'Identificación y programación de los eventos o entregables más significativos del proyecto, que representan puntos de referencia clave para medir el avance dentro del proyecto. \nUn hito representa: \n•	Inicio de fase \n•	Entrega importante \n•	Validación crítica \n•	Finalización de etapa \nHerramienta principal: \n•	Cronograma con hitos críticos',
     uso:'Permite al equipo y los interesados visualizar el progreso del proyecto en momentos clave, facilitando la toma de decisiones y el control del avance.',
     areas:['Tiempos','Alcance','Comunicaciones'],
-    relIcon:'🚩', relacion:'Las Banderas de Ruta: señalan los puntos clave del camino, indicando que se ha avanzado correctamente hacia la meta del proyecto.' },
+    relIcon:'🚩', relacion:'Las Banderas de Ruta: señalan los puntos clave del camino, indicando que se ha avanzado correctamente hacia la meta del proyecto.' , path:'./img/k_planhitos.png' },
 
   { id:'12', icon:'🔄', title:'Optimización del Calendario', subtitle:'Programación, ajustes y optimización', grupo:'ejec',
-    desc:'Proceso continuo de revisión y ajuste del cronograma del proyecto para adaptarlo a las condiciones reales, aplicando técnicas como compresión, paralelismo y nivelación de recursos.',
+    desc:'Es el proceso continuo de revisión y ajuste del cronograma del proyecto para adaptarlo a las condiciones reales, aplicando técnicas como compresión, paralelismo y nivelación de recursos. \n La programación organiza actividades en secuencia lógica para cumplir objetivos dentro del tiempo establecido. \nHerramientas principales: \n•	Diagrama de Diagrama de Gantt \n•	Ruta crítica (CPM) \n•	Calendario de actividades \n•	Software de gestión como Microsoft Project \nPermite: \n•	Reasignar tiempos \n•	Optimizar recursos \n•	Ajustar retrasos',
     uso:'Garantiza que el proyecto se mantenga dentro de los plazos establecidos, optimizando el uso de recursos y reduciendo tiempos muertos o cuellos de botella.',
     areas:['Tiempos','Recursos','Costos'],
-    relIcon:'⚙️', relacion:'Los Engranajes: ajustan y sincronizan las piezas del proyecto para que todo funcione de manera fluida, eficiente y coordinada.' },
+    relIcon:'⚙️', relacion:'Los Engranajes: ajustan y sincronizan las piezas del proyecto para que todo funcione de manera fluida, eficiente y coordinada.' , path:'./img/l_calendario.png' },
 ];
 
 let selectedId = null;
@@ -796,6 +864,24 @@ function openDetail(id) {
   document.getElementById('dUso').textContent = t.uso;
   document.getElementById('dRelIcon').textContent = t.relIcon;
   document.getElementById('dRelacion').textContent = t.relacion;
+
+  // Image handling
+  const imgEl = document.getElementById('dImg');
+  const imgWrap = document.getElementById('dImgWrap');
+  const imgPlaceholder = document.getElementById('dImgPlaceholder');
+  const imgCaption = document.getElementById('dImgCaption');
+  if (t.path && t.path.trim() !== '') {
+    imgEl.src = t.path.trim();
+    imgEl.style.display = 'none'; // shown via onload
+    imgPlaceholder.style.display = 'none';
+    imgCaption.textContent = t.title;
+    imgCaption.style.display = 'block';
+  } else {
+    imgEl.src = '';
+    imgEl.style.display = 'none';
+    imgPlaceholder.style.display = 'flex';
+    imgCaption.style.display = 'none';
+  }
 
   const grupoEl = document.getElementById('dGrupo');
   grupoEl.textContent = c.label;
