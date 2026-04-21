@@ -133,6 +133,44 @@
     margin-top: 2px;
   }
 
+
+  /* ── PRESENTER INFO ───────────────────────────── */
+  .hero-presenters {
+    margin: 1.5rem 0 1.5rem;
+    padding: 1rem 1.25rem;
+    border-left: 3px solid rgba(202,220,252,0.4);
+    background: rgba(202,220,252,0.06);
+    border-radius: 0 8px 8px 0;
+    max-width: 560px;
+  }
+
+  .hero-presenter-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ice);
+    opacity: 0.55;
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+
+  .hero-presenter-names {
+    font-size: 15px;
+    color: var(--white);
+    font-weight: 400;
+    line-height: 1.5;
+    margin-bottom: 4px;
+  }
+
+  .hero-presenter-meta {
+    font-size: 12px;
+    color: var(--ice);
+    opacity: 0.65;
+    font-weight: 300;
+    letter-spacing: 0.2px;
+  }
+
+  .hero.compact .hero-presenters { display: none; }
   /* ── HERO COMPACT (on filter or card select) ──── */
   .hero {
     transition: padding 0.4s ease;
@@ -632,10 +670,16 @@
 <!-- HERO -->
 <header class="hero">
   <div class="hero-inner">
-    <p class="hero-eyebrow">Gestión y planeación de proyectos</p>
+    <p class="hero-eyebrow">Gestión de proyectos</p>
     <h1><span class="hero-title-full">Caja de <em>Herramientas</em><br>Estratégicas</span><span class="hero-title-compact" style="display:none">Gestión y Planeación de Proyectos</span></h1>
     <div class="hero-divider"></div>
     <p class="hero-sub">Conjunto de herramientas esenciales para planificar, ejecutar y controlar proyectos con eficacia, organizadas por grupo de procesos.</p>
+    <div class="hero-presenters">
+      <div class="hero-presenter-label">Presentado por</div>
+      <div class="hero-presenter-names">&nbsp;&middot;&nbsp; Angie Paola Ortegón Lavacude</div>
+	  <div class="hero-presenter-names">&nbsp;&middot;&nbsp; Oscar Javier Páez Torres</div>
+      <div class="hero-presenter-meta">Grupo 212056_131 &nbsp;&middot;&nbsp; Curso: Metodologías de Gestión de Proyectos</div>
+    </div>
     <div class="hero-stats">
       <div class="hero-stat">
         <div class="hero-stat-num">12</div>
